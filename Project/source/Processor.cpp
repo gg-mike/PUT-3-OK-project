@@ -1,6 +1,20 @@
 #include "pch.h"
 #include "Processor.h"
 
+static size_t counter = 1;
+
+inline void PrintBox0() {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
+	std::cout << '|';
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+}
+
+inline void PrintBox1() {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
+	std::cout << '|';
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+}
+
 // ////////////////////
 // Core
 // ////////////////////
@@ -37,12 +51,16 @@ void Core::CalculateTotalLength() {
 
 std::ostream& operator<<(std::ostream& os, const Core& core)
 {
-	os << "|";
 	for (const auto& process : core.processes) {
-		for (size_t i = 0; i < process.length - 1; i++)
-			os << "-";
-		os << "|";
+		for (size_t i = 0; i < process.length - 1; i++) {
+			if (counter % 2)
+				PrintBox1();
+			else
+				PrintBox0();
+		}
+		counter++;
 	}
+	counter = 1;
 	return os;
 }
 
@@ -61,14 +79,36 @@ void Processor::Init(size_t N, const std::vector<size_t>& lengths) {
 
 }
 
+void Processor::Init(const std::string& filepath, char sep) {
+	std::ifstream ifs(filepath);
+	std::string line;
+
+	if (ifs.is_open()) {
+		// Number of cores
+		std::getline(ifs, line, sep);
+		this->N = std::stoull(line);
+		for (size_t i = 0; i < N; i++)
+			cores.push_back(Core());
+
+		// Number of processes [IGNORED]
+		std::getline(ifs, line, sep);
+
+		size_t i = 0;
+		while (std::getline(ifs, line, sep)) {
+			size_t len = std::stoull(line);
+			cores.at(FindLeastUsedCore()).AppendNewProcess(Process(i, len));
+		}
+	}
+	ifs.close();
+}
+
 const Core& Processor::GetCore(size_t ID) const {
 	if (ID < cores.size())
 		return cores[ID];
 	return Core();
 }
 
-size_t Processor::FindCMax()
-{
+size_t Processor::FindCMax() {
 	size_t maxLength = 0, maxLengthID = SIZE_MAX, i;
 
 	for (i = 0; i < N; i++)

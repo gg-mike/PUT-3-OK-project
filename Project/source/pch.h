@@ -9,5 +9,6 @@
 // ----- Other ------------------
 #include <algorithm>
 #include <string>
+#include <Windows.h>
 // ----- Vendor -----------------
 // ----- Own --------------------

@@ -44,6 +44,7 @@ class Processor
 public:
 	Processor(size_t N, const std::vector<size_t>& lengths) { Init(N, lengths); }
 	void Init(size_t N, const std::vector<size_t>& lengths);
+	void Init(const std::string& filepath, char sep = '\n');
 	const Core& GetCore(size_t ID) const;
 	size_t FindCMax();
 
