@@ -1,4 +1,4 @@
-workspace "PP-PO-Project"
+workspace "PP-OK-Project"
     architecture "x64"
     startproject "Project"
 

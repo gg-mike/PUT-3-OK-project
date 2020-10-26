@@ -61,6 +61,12 @@ void Processor::Init(size_t N, const std::vector<size_t>& lengths) {
 
 }
 
+const Core& Processor::GetCore(size_t ID) const {
+	if (ID < cores.size())
+		return cores[ID];
+	return Core();
+}
+
 size_t Processor::FindCMax()
 {
 	size_t maxLength = 0, maxLengthID = SIZE_MAX, i;

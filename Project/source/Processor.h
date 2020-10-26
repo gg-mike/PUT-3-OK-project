@@ -44,6 +44,7 @@ class Processor
 public:
 	Processor(size_t N, const std::vector<size_t>& lengths) { Init(N, lengths); }
 	void Init(size_t N, const std::vector<size_t>& lengths);
+	const Core& GetCore(size_t ID) const;
 	size_t FindCMax();
 
 	friend std::ostream& operator<<(std::ostream& os, const Processor& processor);
