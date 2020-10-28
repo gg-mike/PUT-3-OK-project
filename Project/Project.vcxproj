@@ -93,12 +93,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="source\ProcessGenerator.h" />
     <ClInclude Include="source\Processor.h" />
     <ClInclude Include="source\Profiler.h" />
     <ClInclude Include="source\pch.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Application.cpp" />
+    <ClCompile Include="source\ProcessGenerator.cpp" />
     <ClCompile Include="source\Processor.cpp" />
     <ClCompile Include="source\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

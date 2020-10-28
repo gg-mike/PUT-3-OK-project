@@ -52,7 +52,7 @@ void Core::CalculateTotalLength() {
 std::ostream& operator<<(std::ostream& os, const Core& core)
 {
 	for (const auto& process : core.processes) {
-		for (size_t i = 0; i < process.length - 1; i++) {
+		for (size_t i = 0; i < process.length; i++) { 
 			if (counter % 2)
 				PrintBox1();
 			else
