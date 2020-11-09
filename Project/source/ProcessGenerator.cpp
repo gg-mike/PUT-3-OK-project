@@ -25,23 +25,33 @@ void ProcessGenerator::generateCoresVector() {
 	coresVector.resize(coreCount);
 	int ID = 0;
 	for (int i = 0; i < coreCount; i++) {
-		while (coresVector[i].GetTotalLength() + maxTaskTime < coreTime) {
-			coresVector[i].AppendNewProcess(Process(ID++, random(1, maxTaskTime)));
+		while (coresVector[i].getTotalLength() + maxTaskTime < coreTime) {
+			coresVector[i].appendNewProcess(Process(ID++, random(1, maxTaskTime)));
 			tasksCount++;
 		}
-		if (coresVector[i].GetTotalLength() < coreTime) {
-			coresVector[i].AppendNewProcess(Process(ID++, coreTime - coresVector[i].GetTotalLength()));
+		if (coresVector[i].getTotalLength() < coreTime) {
+			coresVector[i].appendNewProcess(Process(ID++, coreTime - coresVector[i].getTotalLength()));
 			tasksCount++;
 		}
 	}
 	generateTasksVector();
 }
 
+void ProcessGenerator::toFile(const std::string& filepath)
+{
+	std::ofstream ofs(filepath);
+	ofs << coreCount << std::endl;
+	ofs << tasksCount << std::endl;
+	for (const auto& task : tasksVector)
+		ofs << task << std::endl;
+	ofs.close();
+}
+
 void ProcessGenerator::generateTasksVector() {
 	tasksVector.clear();
 	tasksVector.reserve(tasksCount);
 	for (Core& core : coresVector) {
-		for (const Process& process : core.GetProcesses()) {
+		for (const Process& process : core.getProcesses()) {
 			tasksVector.push_back(process.length);
 		}
 	}

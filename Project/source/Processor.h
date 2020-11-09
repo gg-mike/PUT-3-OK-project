@@ -18,21 +18,21 @@ struct Process {
 class Core {
 public:
 	Core() = default;
-	Core(const std::vector<Process>& processes) : processes(processes) { CalculateTotalLength(); }
+	Core(const std::vector<Process>& processes) : processes(processes) { calculateTotalLength(); }
 	Core(size_t totalLength, const std::vector<Process>& processes) 
 		: totalLength(totalLength), processes(processes) {}
 
-	void Init(size_t totalLength, const std::vector<Process>& processes);
-	void AppendNewProcess(Process process);
-	void EraseProcess(size_t ID);
-	size_t GetTotalLength() const { return totalLength; }
-	Process GetProcess(size_t ID);
-	const std::vector<Process>& GetProcesses() const { return std::ref(processes); }
+	void init(size_t totalLength, const std::vector<Process>& processes);
+	void appendNewProcess(Process process);
+	void eraseProcess(size_t ID);
+	size_t getTotalLength() const { return totalLength; }
+	Process getProcess(size_t ID);
+	const std::vector<Process>& getProcesses() const { return std::ref(processes); }
 	
 	friend std::ostream& operator<<(std::ostream& os, const Core& core);
 
 private:
-	void CalculateTotalLength();
+	void calculateTotalLength();
 
 private:
 	size_t totalLength = 0;
@@ -42,16 +42,17 @@ private:
 class Processor
 {
 public:
-	Processor(size_t N, const std::vector<size_t>& lengths) { Init(N, lengths); }
-	void Init(size_t N, const std::vector<size_t>& lengths);
-	void Init(const std::string& filepath, char sep = '\n');
-	const Core& GetCore(size_t ID) const;
-	size_t FindCMax();
+	Processor(size_t N, const std::vector<size_t>& lengths) { init(N, lengths); }
+	Processor(const std::string& filepath, char sep = '\n') { init(filepath); }
+	void init(size_t N, const std::vector<size_t>& lengths);
+	void init(const std::string& filepath, char sep = '\n');
+	const Core& getCore(size_t ID) const;
+	size_t findCMax();
 
 	friend std::ostream& operator<<(std::ostream& os, const Processor& processor);
 
 private:
-	size_t FindLeastUsedCore();
+	size_t findLeastUsedCore();
 
 private:
 	size_t N = 0;
