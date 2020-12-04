@@ -26,6 +26,8 @@ public:
 	Generation(size_t coresNum, const std::vector<size_t>& processesLen, const GenerationParams& genParams) { init(coresNum, processesLen, genParams); }
 	void init(size_t coresNum, const std::vector<size_t>& processesLen, const GenerationParams& genParams);
 	void newGen();
+	size_t getBestCmax() { return bestCmax; }
+	double getAvgCmax() { return avgCmax; }
 	friend std::ostream& operator<<(std::ostream& os, const Generation& generation);
 
 private:
