@@ -1,5 +1,5 @@
 #pragma once
-#include "Processor.h"
+#include "./greedy/Processor.h"
 
 
 class ProcessGenerator {
