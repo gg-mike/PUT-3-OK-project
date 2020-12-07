@@ -14,25 +14,15 @@ namespace Data {
 		"assets/m50n200lpt.txt",
 		"assets/m50n1000.txt"
 	};
-	std::vector<std::string> bestDestFilepaths = {
-		"results/best_m10n21.csv",
-		"results/best_m20n41.csv",
-		"results/best_m25n198.csv",
-		"results/best_m50n101.csv",
-		"results/best_m10n200.csv",
-		"results/best_m50n200.csv",
-		"results/best_m50n200lpt.csv",
-		"results/best_m50n1000.csv"
-	};
-	std::vector<std::string> avgDestFilepaths = {
-		"results/avg_m10n21.csv",
-		"results/avg_m20n41.csv",
-		"results/avg_m25n198.csv",
-		"results/avg_m50n101.csv",
-		"results/avg_m10n200.csv",
-		"results/avg_m50n200.csv",
-		"results/avg_m50n200lpt.csv",
-		"results/avg_m50n1000.csv"
+	std::vector<std::string> resDestFilepaths = {
+		"results/res_m10n21.csv",
+		"results/res_m20n41.csv",
+		"results/res_m25n198.csv",
+		"results/res_m50n101.csv",
+		"results/res_m10n200.csv",
+		"results/res_m50n200.csv",
+		"results/res_m50n200lpt.csv",
+		"results/res_m50n1000.csv"
 	};
 	std::vector<size_t> coresNums = std::vector<size_t>(Data::size, 0);
 	std::vector<std::vector<size_t>> processesLens = std::vector<std::vector<size_t>>(Data::size, std::vector<size_t>());
@@ -93,28 +83,31 @@ void testGenetic() {
 void testGenetic(size_t first, size_t last, size_t trailsNum, const std::string& title) {
 	Generation gen;
 	for (size_t i = first; i <= last; i++) {
-		std::ofstream bestOfs(Data::bestDestFilepaths[i], std::ios::app);
-		std::ofstream avgOfs(Data::avgDestFilepaths[i], std::ios::app);
-		bestOfs << title << std::endl;
-		avgOfs << title << std::endl;
+		std::ofstream ofs(Data::resDestFilepaths[i], std::ios::app);
+		ofs << title << "\nN;Best;Avg\n";
+
 		size_t iter = Data::coresNums[i] * 10;
+		std::vector<double> bestCmaxs = std::vector<double>(iter, 0);
+		std::vector<double> avgCmaxs = std::vector<double>(iter, 0);
+		
 		for (size_t t = 0; t < trailsNum; t++) {
 			gen.init(Data::coresNums[i], Data::processesLens[i], Data::geneticParams[i]);
 			std::cout << "(" << t << "/" << trailsNum << ")\n";
 			for (size_t j = 0; j < iter; j++) {
 				std::cout << " " << static_cast<size_t>((j * 100.0) / iter) << "%";
-				bestOfs << gen.getBestCmax() << ';';
-				avgOfs << gen.getAvgCmax() << ';';
+				bestCmaxs[j] += gen.getBestCmax();
+				avgCmaxs[j] += gen.getAvgCmax();
 				gen.newGen();
 				std::cout << '\r';
 			}
-			bestOfs << gen.getBestCmax() << ";\n";
-			avgOfs << gen.getAvgCmax() << ";\n";
 		}
-		bestOfs << std::endl;
-		avgOfs << std::endl;
-		bestOfs.close();
-		avgOfs.close();
+		for (size_t j = 0; j < iter; j++) {
+			bestCmaxs[j] /= trailsNum;
+			avgCmaxs[j] /= trailsNum;
+			ofs << j << ';' << bestCmaxs[j] << ';' << avgCmaxs[j] << std::endl;
+		}
+		ofs << std::endl;
+		ofs.close();
 		std::cout << "done\n";
 	}
 	std::cout << "end\n";
@@ -125,7 +118,8 @@ int main() {
 	initAll();
 	testGreedy();
 	std::cout << std::endl;
-	testGenetic(0, 2, 10, "genetic (prLen*10, coresN*10, size/100, .75, .01)");
+	testGenetic();
+	//testGenetic(7, 7, 1, "genetic (prLen*10, coresN*10, size/100, .75, .01)");
 	std::cout << "end";
 	std::cin.get();
 }
