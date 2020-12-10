@@ -93,17 +93,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="source\greedy\Greedy.h" />
+    <ClInclude Include="source\utill\Data.h" />
+    <ClInclude Include="source\genetic\Genetic.h" />
     <ClInclude Include="source\genetic\Generation.h" />
     <ClInclude Include="source\genetic\Instance.h" />
-    <ClInclude Include="source\ProcessGenerator.h" />
+    <ClInclude Include="source\utill\ProcessGenerator.h" />
     <ClInclude Include="source\greedy\Processor.h" />
     <ClInclude Include="source\pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\greedy\Greedy.cpp" />
+    <ClCompile Include="source\utill\Data.cpp" />
+    <ClCompile Include="source\genetic\Genetic.cpp" />
     <ClCompile Include="source\genetic\Generation.cpp" />
     <ClCompile Include="source\genetic\Instance.cpp" />
     <ClCompile Include="source\Application.cpp" />
-    <ClCompile Include="source\ProcessGenerator.cpp" />
+    <ClCompile Include="source\utill\ProcessGenerator.cpp" />
     <ClCompile Include="source\greedy\Processor.cpp" />
     <ClCompile Include="source\pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

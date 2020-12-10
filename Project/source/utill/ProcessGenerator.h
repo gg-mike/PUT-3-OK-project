@@ -4,7 +4,7 @@
 
 class ProcessGenerator {
 public:
-	ProcessGenerator(int coreCount, int coreTime, int maxTaskTime) throw(int);
+	ProcessGenerator(int coreCount, int coreTime, int maxTaskTime);
 	~ProcessGenerator();
 
 	void generateCoresVector();

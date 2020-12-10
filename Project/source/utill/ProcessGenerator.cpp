@@ -9,10 +9,10 @@ T random(T min, T max) {
 	return std::uniform_int_distribution<T>{min, max}(gen);
 }
 
-ProcessGenerator::ProcessGenerator(int coreCount, int coreTime, int maxTaskTime) throw(int)
+ProcessGenerator::ProcessGenerator(int coreCount, int coreTime, int maxTaskTime)
 	: coreCount(coreCount), coreTime(coreTime), maxTaskTime(maxTaskTime) {
 	if (coreCount < 0 || coreTime < 0 || maxTaskTime < 0)
-		throw - 1;
+		__debugbreak();
 
 	generateCoresVector();
 }

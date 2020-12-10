@@ -1,8 +1,11 @@
 #include "pch.h"
-#include "ProcessGenerator.h"
+#include "genetic/Genetic.h"
+#include "utill/ProcessGenerator.h"
 #include "genetic/Generation.h"
+#include "greedy/Greedy.h"
 
-namespace Data {
+
+namespace AllData {
 	size_t size = 8;
 	std::vector<std::string> srcFilepaths = {
 		"assets/m10n21.txt",
@@ -24,102 +27,37 @@ namespace Data {
 		"results/res_m50n200lpt.csv",
 		"results/res_m50n1000.csv"
 	};
-	std::vector<size_t> coresNums = std::vector<size_t>(Data::size, 0);
-	std::vector<std::vector<size_t>> processesLens = std::vector<std::vector<size_t>>(Data::size, std::vector<size_t>());
-	std::vector<GenerationParams> geneticParams = std::vector<GenerationParams>(Data::size, GenerationParams());
 }
 
-void initData(const std::string& filepath, size_t& coresNum, std::vector<size_t>& processesLen, GenerationParams& genParams)
+void testGreedy(size_t first, size_t last)
 {
-	std::ifstream ifs(filepath);
-	std::string line;
-	processesLen.clear();
-
-	if (ifs.is_open()) {
-		// Number of cores
-		std::getline(ifs, line);
-		coresNum = std::stoull(line);
-		// Number of processes [IGNORED]
-		std::getline(ifs, line);
-
-		while (std::getline(ifs, line))
-			processesLen.push_back(std::stoull(line));
-	}
-	ifs.close();
-
-	genParams = GenerationParams(processesLen.size() * 10, clamp(processesLen.size() / 10, 2, SIZE_MAX), .75, .01);
-}
-
-void initAll() {
-	for (size_t i = 0; i < Data::size; i++)
-		initData(Data::srcFilepaths[i], Data::coresNums[i], Data::processesLens[i], Data::geneticParams[i]);
-}
-
-void testGreedy() {
-	Processor processor;
-	for (size_t i = 0; i < Data::size; i++) {
-		processor.init(Data::coresNums[i], Data::processesLens[i]);
-		std::cout << "m=" << std::setw(2) << Data::coresNums[i] << ", n=" << std::setw(4) << Data::processesLens[i].size() << ": "
-			<< std::setw(6) << processor.getCore(processor.findCMax()).getTotalLength() << "\n";
-	}
-
-}
-
-void testGenetic() {
-	Generation gen;
-	for (size_t i = 0; i < Data::size; i++) {
-		gen.init(Data::coresNums[i], Data::processesLens[i], Data::geneticParams[i]);
-		std::cout << "m=" << std::setw(2) << Data::coresNums[i] << ", n=" << std::setw(4) << Data::processesLens[i].size() << ":\n" << gen;
-		size_t iter = Data::coresNums[i] * 10;
-		for (size_t j = 0; j < iter; j++) {
-			std::cout << " " << static_cast<size_t>((j * 100.0) / iter) << "%";
-			gen.newGen();
-			std::cout << '\r';
-		}
-		std::cout << gen << std::endl;
+	for (size_t index = first; index < clamp(last, first, AllData::size); index++)
+	{
+		Data data(AllData::srcFilepaths[index]);
+		std::cout << "VectorSize: " << data.getTasksVectorSize() << std::endl;
+		Greedy::test(data);
 	}
 }
 
-void testGenetic(size_t first, size_t last, size_t trailsNum, const std::string& title) {
-	Generation gen;
-	for (size_t i = first; i <= last; i++) {
-		std::ofstream ofs(Data::resDestFilepaths[i], std::ios::app);
-		ofs << title << "\nN;Best;Avg\n";
-
-		size_t iter = Data::coresNums[i] * 10;
-		std::vector<double> bestCmaxs = std::vector<double>(iter, 0);
-		std::vector<double> avgCmaxs = std::vector<double>(iter, 0);
-		
-		for (size_t t = 0; t < trailsNum; t++) {
-			gen.init(Data::coresNums[i], Data::processesLens[i], Data::geneticParams[i]);
-			std::cout << "(" << t << "/" << trailsNum << ")\n";
-			for (size_t j = 0; j < iter; j++) {
-				std::cout << " " << static_cast<size_t>((j * 100.0) / iter) << "%";
-				bestCmaxs[j] += gen.getBestCmax();
-				avgCmaxs[j] += gen.getAvgCmax();
-				gen.newGen();
-				std::cout << '\r';
-			}
-		}
-		for (size_t j = 0; j < iter; j++) {
-			bestCmaxs[j] /= trailsNum;
-			avgCmaxs[j] /= trailsNum;
-			ofs << j << ';' << bestCmaxs[j] << ';' << avgCmaxs[j] << std::endl;
-		}
-		ofs << std::endl;
-		ofs.close();
-		std::cout << "done\n";
+void testGenetic(size_t first, size_t last)
+{
+	for (size_t index = first; index < clamp(last,first, AllData::size); index++)
+	{
+		Data data(AllData::srcFilepaths[index]);
+		GenerationParams genParams(clamp(10 * data.getTasksVectorSize(), 100ull, 500ull), clamp(data.getTasksVectorSize() / 10, 10ull, 50ull), .75, .01, 10);
+		std::cout << "VectorSize: " << data.getTasksVectorSize() << std::endl;
+		Genetic::test(data, genParams, AllData::resDestFilepaths[index]);
 	}
-	std::cout << "end\n";
-
 }
 
-int main() {
-	initAll();
-	testGreedy();
-	std::cout << std::endl;
-	testGenetic();
-	//testGenetic(7, 7, 1, "genetic (prLen*10, coresN*10, size/100, .75, .01)");
+
+int main() 
+{
+
+	testGenetic(0, 10);
+
+	
+
 	std::cout << "end";
 	std::cin.get();
 }
