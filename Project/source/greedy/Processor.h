@@ -42,6 +42,7 @@ private:
 class Processor
 {
 public:
+	Processor() {}
 	Processor(size_t N, const std::vector<size_t>& lengths) { init(N, lengths); }
 	Processor(const std::string& filepath, char sep = '\n') { init(filepath); }
 	void init(size_t N, const std::vector<size_t>& lengths);

@@ -1,10 +1,10 @@
 #pragma once
-#include "Processor.h"
+#include "./greedy/Processor.h"
 
 
 class ProcessGenerator {
 public:
-	ProcessGenerator(int coreCount, int coreTime, int maxTaskTime) throw(int);
+	ProcessGenerator(int coreCount, int coreTime, int maxTaskTime);
 	~ProcessGenerator();
 
 	void generateCoresVector();
