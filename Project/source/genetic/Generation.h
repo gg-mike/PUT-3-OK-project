@@ -33,6 +33,7 @@ public:
 	Generation() = default;
 	Generation(size_t coresNum, const std::vector<size_t>& processesLen, const GenerationParams& genParams) { init(coresNum, processesLen, genParams); }
 	void init(size_t coresNum, const std::vector<size_t>& processesLen, const GenerationParams& genParams);
+	~Generation();
 	void newGen();
 	size_t getBestCmax() { return bestCmax; }
 	double getAvgCmax() { return avgCmax; }

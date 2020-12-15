@@ -16,7 +16,11 @@ void Generation::init(size_t coresNum, const std::vector<size_t>& processesLen, 
 		instances[i].init(coresNum, processesLen);
 	calcCmaxs();
 }
-
+Generation::~Generation()
+{
+	delete[]instances;
+	delete[]instancesBuffor;
+}
 void Generation::newGen() {
 	int i = 0;
 	while (i < instancesCount) {
