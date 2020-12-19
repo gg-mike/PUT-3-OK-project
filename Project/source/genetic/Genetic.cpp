@@ -19,21 +19,20 @@ void runGenetic(size_t iterations, Data data, GenerationParams genParams, std::v
 
 void Genetic::test(Data& data, GenerationParams& generationParams, const std::string& outputFileName) 
 {
-	std::ofstream ofs(outputFileName);
+	std::ofstream ofs(outputFileName, std::ios::app);
 	if (ofs.is_open())
 	{
-		ofs << "Genetic " + data.getTitle() << "\nN;Best;Avg\n";
-		size_t iter = 500;
-
-		std::vector<std::vector<size_t>> bestCmaxs(generationParams.trialsNum, std::vector<size_t>(iter, 0));
-		std::vector<std::vector<double>> avgCmaxs(generationParams.trialsNum, std::vector<double>(iter, 0));
+		data.algorithmInit(generationParams);
+		ofs << data.getInstance() << std::endl << data.getAlgorithm() << std::endl;
+		std::vector<std::vector<size_t>> bestCmaxs(generationParams.trialsNum, std::vector<size_t>(generationParams.iterations, 0));
+		std::vector<std::vector<double>> avgCmaxs(generationParams.trialsNum, std::vector<double>(generationParams.iterations, 0));
 
 		std::vector<std::thread> threads;
 
 
 		for (size_t t = 0; t < generationParams.trialsNum; t++)
 		{
-			threads.push_back(std::thread(runGenetic, iter, data, generationParams, std::ref(bestCmaxs[t]), std::ref(avgCmaxs[t])));
+			threads.push_back(std::thread(runGenetic, generationParams.iterations, data, generationParams, std::ref(bestCmaxs[t]), std::ref(avgCmaxs[t])));
 		}
 		
 		for (std::thread& t : threads)
@@ -43,7 +42,7 @@ void Genetic::test(Data& data, GenerationParams& generationParams, const std::st
 			std::cout << " ended\n";
 		}
 
-		for (size_t i = 0; i < iter; i++)
+		for (size_t i = 0; i < generationParams.iterations; i++)
 		{
 			size_t best = MAXUINT64;
 			double avg = 0;
@@ -53,10 +52,10 @@ void Genetic::test(Data& data, GenerationParams& generationParams, const std::st
 				if (bestCmaxs[j][i] < best)
 					best = bestCmaxs[j][i];
 			}
-			ofs << i << ';' << best << ';' << avg / generationParams.trialsNum << std::endl;
+			ofs << best << ';' << avg / generationParams.trialsNum << std::endl;
 		}
 		
-		ofs << std::endl;
+		ofs << "X" << std::endl;
 		ofs.close();
 		std::cout << "done\n";
 	} 

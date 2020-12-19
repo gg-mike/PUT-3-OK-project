@@ -21,5 +21,15 @@ Data::Data(const std::string& filepath)
 	}
 	ifs.close();
 
-	title = "Cores: " + std::to_string(coreCount) + ", Tasks: " + std::to_string(getTasksVectorSize());
+	instance = "Cores: " + std::to_string(coreCount) + ", tasks: " + std::to_string(getTasksVectorSize());
+}
+
+void Data::algorithmInit(GenerationParams generationParams)
+{
+	std::stringstream ss;
+	ss << "(" << generationParams.instancesCount << "|" << generationParams.iterations << "|" << 
+		generationParams.tournamentSize << "|" <<
+		std::setprecision(3) << generationParams.crossoverRate << "|" <<
+		std::setprecision(3) << generationParams.mutationRate << ")";
+	algorithm = ss.str();
 }

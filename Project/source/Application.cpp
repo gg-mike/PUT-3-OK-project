@@ -44,7 +44,7 @@ void testGenetic(size_t first, size_t last)
 	for (size_t index = first; index < clamp(last,first, AllData::size); index++)
 	{
 		Data data(AllData::srcFilepaths[index]);
-		GenerationParams genParams(clamp(10 * data.getTasksVectorSize(), 100ull, 500ull), clamp(data.getTasksVectorSize() / 10, 10ull, 50ull), .75, .01, 10);
+		GenerationParams genParams(clamp(10 * data.getTasksVectorSize(), 100ull, 500ull), 500, clamp(data.getTasksVectorSize() / 10, 10ull, 50ull), .9, .01, 10);
 		std::cout << "VectorSize: " << data.getTasksVectorSize() << std::endl;
 		Genetic::test(data, genParams, AllData::resDestFilepaths[index]);
 	}
@@ -55,8 +55,6 @@ int main()
 {
 
 	testGenetic(0, 10);
-
-	
 
 	std::cout << "end";
 	std::cin.get();

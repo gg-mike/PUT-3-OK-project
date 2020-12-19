@@ -14,13 +14,14 @@ T clamp(T val, T mn, T mx) {
 
 struct GenerationParams {
 	GenerationParams() = default;
-	GenerationParams(size_t instancesCount, size_t tournamentSize, double crossoverRate, double mutationRate, size_t trialsNum)
-	: instancesCount(instancesCount), tournamentSize(tournamentSize), trialsNum(trialsNum) {
+	GenerationParams(size_t instancesCount, size_t iterations, size_t tournamentSize, double crossoverRate, double mutationRate, size_t trialsNum)
+	: instancesCount(instancesCount), iterations(iterations), tournamentSize(tournamentSize), trialsNum(trialsNum) {
 		this->crossoverRate = clamp(crossoverRate, 0.0, 1.0);
 		this->mutationRate = clamp(mutationRate, 0.0, 1.0);
 	}
 
 	size_t instancesCount = 10;
+	size_t iterations = 100;
 	size_t trialsNum = 1;
 	size_t tournamentSize = 0;
 	double crossoverRate = 0;

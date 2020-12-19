@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 // ----- Multi-threading --------
 // ----- Other ------------------
 #include <algorithm>

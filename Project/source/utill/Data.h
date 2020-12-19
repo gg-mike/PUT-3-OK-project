@@ -1,10 +1,13 @@
 #pragma once
 #include <string>
+#include "genetic/Generation.h"
 
 class Data
 {
 public:
 	Data(const std::string& filepath);
+
+	void algorithmInit(GenerationParams generationParams);
 
 	size_t getTasksVectorSize() {
 		return tasksVector.size();
@@ -18,13 +21,17 @@ public:
 		return coreCount;
 	}
 
-	std::string getTitle() {
-		return title;
+	std::string getInstance() {
+		return instance;
+	}
+
+	std::string getAlgorithm() {
+		return algorithm;
 	}
 
 private:
 	std::vector<size_t> tasksVector;
 	size_t coreCount;
-	std::string title;
+	std::string instance, algorithm = "";
 };
 
