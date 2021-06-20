@@ -1,4 +1,3 @@
 # PP-OK-Project
-Coding guidelines
-- names of variables: varName
-- names of function, structs, classes: NameForSth
+## Genetic Algorithm to solve PCmax problem. 
+Made with [KanarXD](https://github.com/KanarXD).
